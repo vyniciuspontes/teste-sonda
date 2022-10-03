@@ -1,4 +1,4 @@
-package br.com.elo7.sonda.candidato.service;
+package br.com.elo7.sonda.candidato.application;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,21 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.annotations.VisibleForTesting;
-import br.com.elo7.sonda.candidato.dto.InputDTO;
-import br.com.elo7.sonda.candidato.dto.ProbeDTO;
-import br.com.elo7.sonda.candidato.model.Command;
-import br.com.elo7.sonda.candidato.model.Direction;
-import br.com.elo7.sonda.candidato.model.Planet;
-import br.com.elo7.sonda.candidato.model.Probe;
-import br.com.elo7.sonda.candidato.persistence.Planets;
-import br.com.elo7.sonda.candidato.persistence.Probes;
+import br.com.elo7.sonda.candidato.adapter.dto.InputDTO;
+import br.com.elo7.sonda.candidato.adapter.dto.ProbeDTO;
+import br.com.elo7.sonda.candidato.domain.Command;
+import br.com.elo7.sonda.candidato.domain.Direction;
+import br.com.elo7.sonda.candidato.domain.Planet;
+import br.com.elo7.sonda.candidato.domain.Probe;
+import br.com.elo7.sonda.candidato.domain.repository.PlanetRepository;
+import br.com.elo7.sonda.candidato.domain.repository.ProbeRepository;
 
 @Service
 public class ProbeService {
 	@Autowired
-	private Planets planets;
+	private PlanetRepository planets;
 	@Autowired
-	private Probes probes;
+	private ProbeRepository probes;
 	
 	public List<Probe> landProbes(InputDTO input) {
 		Planet planet = concertPlanet(input);

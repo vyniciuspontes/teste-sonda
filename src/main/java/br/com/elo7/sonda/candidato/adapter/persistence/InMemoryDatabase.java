@@ -1,23 +1,25 @@
-package br.com.elo7.sonda.candidato.persistence;
+package br.com.elo7.sonda.candidato.adapter.persistence;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import br.com.elo7.sonda.candidato.domain.repository.PlanetRepository;
+import br.com.elo7.sonda.candidato.domain.repository.ProbeRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.google.common.collect.Lists;
-import br.com.elo7.sonda.candidato.model.Planet;
-import br.com.elo7.sonda.candidato.model.Probe;
+import br.com.elo7.sonda.candidato.domain.Planet;
+import br.com.elo7.sonda.candidato.domain.Probe;
 
 @Component
 class InMemoryDatabase {
 	private static Map<Planet, List<Probe>> probesPerPlanet = new HashMap<>();
 	
 	@Repository
-	public class PlanetDAO implements Planets {
+	public class PlanetDAO implements PlanetRepository {
 		public void save(Planet planet) {
 			planet.setId(generatePlanetId());
 			probesPerPlanet.put(planet, Lists.newArrayList());
@@ -36,7 +38,7 @@ class InMemoryDatabase {
 	}
 	
 	@Repository	
-	public class ProbeDAO implements Probes {
+	public class ProbeDAO implements ProbeRepository {
 		@Override
 		public void save(Probe probe) {
 			List<Probe> probes = probesPerPlanet.get(probe.getPlanet());
