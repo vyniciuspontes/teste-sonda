@@ -1,7 +1,4 @@
-package br.com.elo7.sonda.candidato.domain.repository;
-
-import br.com.elo7.sonda.candidato.domain.Planet;
-import br.com.elo7.sonda.candidato.domain.PlanetId;
+package br.com.elo7.sonda.candidato.domain;
 
 import java.util.Optional;
 import java.util.Set;
