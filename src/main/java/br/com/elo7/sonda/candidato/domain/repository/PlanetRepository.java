@@ -1,13 +1,15 @@
 package br.com.elo7.sonda.candidato.domain.repository;
 
 import br.com.elo7.sonda.candidato.domain.Planet;
+import br.com.elo7.sonda.candidato.domain.PlanetId;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface PlanetRepository {
 
-	void save(Planet planet);
+  void saveAll(Set<Planet> planet);
 
-	Optional<Planet> findById(int id);
+  Optional<Planet> findById(PlanetId id);
 
 }

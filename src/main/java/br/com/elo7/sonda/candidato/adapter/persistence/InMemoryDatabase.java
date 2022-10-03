@@ -1,62 +1,56 @@
 package br.com.elo7.sonda.candidato.adapter.persistence;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import br.com.elo7.sonda.candidato.domain.Planet;
+import br.com.elo7.sonda.candidato.domain.PlanetId;
+import br.com.elo7.sonda.candidato.domain.Probe;
+import br.com.elo7.sonda.candidato.domain.ProbeId;
 import br.com.elo7.sonda.candidato.domain.repository.PlanetRepository;
 import br.com.elo7.sonda.candidato.domain.repository.ProbeRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import com.google.common.collect.Lists;
-import br.com.elo7.sonda.candidato.domain.Planet;
-import br.com.elo7.sonda.candidato.domain.Probe;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 @Component
 class InMemoryDatabase {
-	private static Map<Planet, List<Probe>> probesPerPlanet = new HashMap<>();
-	
-	@Repository
-	public class PlanetDAO implements PlanetRepository {
-		public void save(Planet planet) {
-			planet.setId(generatePlanetId());
-			probesPerPlanet.put(planet, Lists.newArrayList());
-		}
+  private static final Map<Planet, List<Probe>> probesPerPlanet = new HashMap<>();
 
-		private int generatePlanetId() {
-			return probesPerPlanet.size()+1;
-		}
+  @Repository
+  public class PlanetDAO implements PlanetRepository {
+    public void saveAll(Set<Planet> planets) {
+      planets.forEach(planet -> probesPerPlanet.put(planet, planet.getProbes()));
+    }
 
-		public Optional<Planet> findById(int id) {
-			return probesPerPlanet.keySet()
-					.stream()
-					.filter(planet -> planet.getId() == id)
-					.findFirst();
-		}
-	}
-	
-	@Repository	
-	public class ProbeDAO implements ProbeRepository {
-		@Override
-		public void save(Probe probe) {
-			List<Probe> probes = probesPerPlanet.get(probe.getPlanet());
-			probe.setId(generateProbeId(probe, probes.size()));
-			probes.add(probe);
-		}
+    public Optional<Planet> findById(PlanetId id) {
+      return probesPerPlanet.keySet()
+        .stream()
+        .filter(planet -> planet.getId() == id)
+        .findFirst();
+    }
+  }
 
-		private int generateProbeId(Probe probe, int size) {
-			return 7*(size+1)+11*probe.getPlanet().getId();
-		}
+  @Repository
+  public class ProbeDAO implements ProbeRepository {
+    @Override
+    public void saveAll(Set<Probe> newProbes) {
+      newProbes.forEach(probe -> {
+        final Planet foundPlanet = probesPerPlanet.keySet().stream().filter(planet -> planet.getId() == probe.getPlanetId()).findFirst().orElseThrow();
+        List<Probe> probes = probesPerPlanet.get(foundPlanet);
+        probes.add(probe);
+      });
+    }
 
-		@Override
-		public Optional<Probe> findById(int id) {
-			return probesPerPlanet.entrySet().stream().flatMap(
-						entry -> entry.getValue()
-										.stream()
-										.filter(probe -> probe.getId() == id)
-					).findFirst();
-		}
-	}
+    @Override
+    public Optional<Probe> findById(ProbeId id) {
+      return probesPerPlanet.entrySet().stream().flatMap(
+        entry -> entry.getValue()
+          .stream()
+          .filter(probe -> probe.getId() == id)
+      ).findFirst();
+    }
+  }
 }
