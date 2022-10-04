@@ -1,7 +1,5 @@
 package br.com.elo7.sonda.candidato.domain;
 
-import com.google.common.annotations.VisibleForTesting;
-
 public class Probe {
 
   private final ProbeId id;
@@ -33,7 +31,6 @@ public class Probe {
     return this.direction;
   }
 
-  @VisibleForTesting
   public void applyCommandToProbe(Command command) {
     switch (command) {
       case R -> turnProbeRight();

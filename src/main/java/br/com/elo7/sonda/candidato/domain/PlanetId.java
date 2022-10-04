@@ -1,19 +1,12 @@
 package br.com.elo7.sonda.candidato.domain;
 
-public class PlanetId {
+public record PlanetId(String value) {
 
-  private final int value;
+  public PlanetId {
 
-  public PlanetId(int value) {
-
-    if (value <= 0)
+    if (value == null || value.isEmpty() || value.isBlank())
       //TODO change message
       throw new IllegalArgumentException();
 
-    this.value = value;
-  }
-
-  public int get() {
-    return value;
   }
 }

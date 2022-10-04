@@ -2,6 +2,7 @@ package br.com.elo7.sonda.candidato.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Planet {
@@ -10,28 +11,30 @@ public class Planet {
   private final PlanetDimension height;
   private final List<Probe> probes;
 
-  public Planet(PlanetId id, PlanetDimension width, PlanetDimension height) {
+  private final PlanetName name;
+
+  public Planet(PlanetId id, PlanetName name, PlanetDimension width, PlanetDimension height) {
     this.id = id;
+    this.name = name;
     this.width = width;
     this.height = height;
     this.probes = new ArrayList<>();
   }
 
-  @Override
-  public int hashCode() {
-    return this.id.get();
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof Planet) {
-      return ((Planet) obj).id.get() == this.id.get();
-    }
-    return false;
-  }
-
   public PlanetId getId() {
     return this.id;
+  }
+
+  public PlanetDimension getWidth() {
+    return width;
+  }
+
+  public PlanetDimension getHeight() {
+    return height;
+  }
+
+  public PlanetName getName() {
+    return name;
   }
 
   public List<Probe> getProbes() {
@@ -55,8 +58,8 @@ public class Planet {
     probes.add(newProbe);
   }
 
-  public void move(Probe probe, List<Command> commands) {
-    final Probe currentProbe = probes.stream().filter(planetProbe -> planetProbe.equals(probe)).findFirst().orElseThrow();
+  public void move(ProbeId probeId, List<Command> commands) {
+    final Probe currentProbe = probes.stream().filter(planetProbe -> planetProbe.getId().equals(probeId)).findFirst().orElseThrow();
 
     commands.forEach(command -> {
       currentProbe.applyCommandToProbe(command);
@@ -82,5 +85,17 @@ public class Planet {
   private Boolean isOutOfBounds(Probe probe) {
     return probe.getPosition().getX() < 0 || probe.getPosition().getX() >= this.width.get() ||
       probe.getPosition().getY() < 0 || probe.getPosition().getY() >= this.height.get();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Planet planet)) return false;
+    return id.equals(planet.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
