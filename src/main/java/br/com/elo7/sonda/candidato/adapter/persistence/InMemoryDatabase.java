@@ -16,8 +16,9 @@ class InMemoryDatabase {
 
   @Repository
   public class PlanetDAO implements PlanetRepository {
-    public void saveAll(Set<Planet> planets) {
-      InMemoryDatabase.planets.addAll(planets);
+    public Planet save(Planet planet) {
+      InMemoryDatabase.planets.add(planet);
+      return planet;
     }
 
     public Optional<Planet> findById(PlanetId id) {
@@ -25,6 +26,11 @@ class InMemoryDatabase {
         .stream()
         .filter(planet -> planet.getId() == id)
         .findFirst();
+    }
+
+    @Override
+    public Set<Planet> findAll() {
+      return planets;
     }
   }
 }
