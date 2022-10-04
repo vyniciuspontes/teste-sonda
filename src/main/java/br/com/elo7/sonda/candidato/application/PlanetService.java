@@ -1,11 +1,13 @@
 package br.com.elo7.sonda.candidato.application;
 
 import br.com.elo7.sonda.candidato.application.commands.CreatePlanet;
-import br.com.elo7.sonda.candidato.application.commands.LandProbe;
+import br.com.elo7.sonda.candidato.application.commands.LandProbes;
 import br.com.elo7.sonda.candidato.application.commands.MoveProbe;
 import br.com.elo7.sonda.candidato.domain.Planet;
 import br.com.elo7.sonda.candidato.domain.PlanetId;
 import br.com.elo7.sonda.candidato.domain.PlanetRepository;
+import br.com.elo7.sonda.candidato.domain.Probe;
+import br.com.elo7.sonda.candidato.domain.ProbeId;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -20,27 +22,30 @@ public class PlanetService implements ControlProbesUseCase, ManagePlanetsUseCase
   }
 
   @Override
-  public void execute(LandProbe landProbe) {
+  public Planet execute(LandProbes landProbes) {
 
-    final Planet planet = planetRepository.findById(landProbe.planetId()).stream().findFirst()
+    final Planet planet = planetRepository.findById(landProbes.planetId()).stream().findFirst()
       //TOdo change exception
       .orElseThrow(IllegalStateException::new);
-    landProbe.probeCommands().forEach(probeCommands -> {
-      planet.land(probeCommands.probe());
-      planet.move(probeCommands.probe().getId(), probeCommands.commands());
-    });
 
-    planetRepository.save(planet);
+    landProbes.coordinates()
+      .forEach(coordinates -> {
+          Probe newProbe = new Probe(new ProbeId(UUID.randomUUID().toString()), coordinates.probeName(),
+            coordinates.startPosition(), coordinates.startDirection(), landProbes.planetId());
+          planet.land(newProbe);
+      });
+
+    return planetRepository.save(planet);
   }
 
   @Override
-  public void execute(MoveProbe moveProbe) {
+  public Planet execute(MoveProbe moveProbe) {
     final Planet planet = planetRepository.findById(moveProbe.planetId())
       //Todo change exception
       .orElseThrow(IllegalStateException::new);
 
     planet.move(moveProbe.probeId(), moveProbe.commands());
-    planetRepository.save(planet);
+    return planetRepository.save(planet);
   }
 
   @Override

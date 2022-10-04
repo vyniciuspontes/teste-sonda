@@ -4,11 +4,14 @@ public class Probe {
 
   private final ProbeId id;
   private final PlanetId planetId;
+
+  private final ProbeName name;
   private Position position;
   private Direction direction;
 
-  public Probe(ProbeId id, Position position, Direction direction, PlanetId planetId) {
+  public Probe(ProbeId id, ProbeName name, Position position, Direction direction, PlanetId planetId) {
     this.id = id;
+    this.name = name;
     this.position = position;
     this.direction = direction;
     this.planetId = planetId;
@@ -21,6 +24,10 @@ public class Probe {
 
   public PlanetId getPlanetId() {
     return planetId;
+  }
+
+  public ProbeName getName() {
+    return name;
   }
 
   public Position getPosition() {

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 public class PlanetTest {
 
@@ -40,16 +39,16 @@ public class PlanetTest {
   public void should_throw_exception_when_probe_lands_out_of_bounds() {
     Planet planet = PlanetGenerator.gen();
 
-    Probe probe1 = new Probe(new ProbeId(UUID.randomUUID().toString()), new Position(5, 0), Direction.N, planet.getId());
+    Probe probe1 = ProbeGenerator.gen(planet.getId().value(), 5, 0, Direction.N);
     Assertions.assertThrows(IllegalStateException.class, () -> planet.land(probe1));
 
-    Probe probe2 = new Probe(new ProbeId(UUID.randomUUID().toString()), new Position(-1, 0), Direction.N, planet.getId());
+    Probe probe2 = ProbeGenerator.gen(planet.getId().value(), -1, 0, Direction.N);
     Assertions.assertThrows(IllegalStateException.class, () -> planet.land(probe2));
 
-    Probe probe3 = new Probe(new ProbeId(UUID.randomUUID().toString()), new Position(0, 5), Direction.N, planet.getId());
+    Probe probe3 = ProbeGenerator.gen(planet.getId().value(), 0, 5, Direction.N);
     Assertions.assertThrows(IllegalStateException.class, () -> planet.land(probe3));
 
-    Probe probe4 = new Probe(new ProbeId(UUID.randomUUID().toString()), new Position(0, -1), Direction.N, planet.getId());
+    Probe probe4 = ProbeGenerator.gen(planet.getId().value(), 0, -1, Direction.N);
     Assertions.assertThrows(IllegalStateException.class, () -> planet.land(probe4));
   }
 

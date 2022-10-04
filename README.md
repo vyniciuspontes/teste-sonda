@@ -81,8 +81,9 @@ Com isso as dependências serão baixadas e a API subirá na porta `8080`;
 curl -X POST http://localhost:8080/planet-with-probes -H 'Content-Type: application/json' -d '{"width":10,"height":10,"probes":[{"x":1,"y":2,"direction":"N","commands": "LMLMLMLMM"},{"x":3,"y":3,"direction":"E","commands": "MMRMMRMRRM"}]}'
 ```
 
-## Suposições do Candidato
+## Suposições do Candidato Vynicius
 
 ### Regras de negócio
 - As sondas não podem se mover para fora do plano cartesiano
 - As sondas não podem colidir
+- Lançar a sonda e mover a sonda são 2 comandos distintos

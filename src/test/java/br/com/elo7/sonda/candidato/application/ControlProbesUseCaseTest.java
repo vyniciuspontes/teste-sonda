@@ -1,17 +1,20 @@
 package br.com.elo7.sonda.candidato.application;
 
-import br.com.elo7.sonda.candidato.application.commands.LandProbe;
+import br.com.elo7.sonda.candidato.application.commands.LandProbes;
 import br.com.elo7.sonda.candidato.application.commands.MoveProbe;
-import br.com.elo7.sonda.candidato.application.commands.ProbeCommands;
 import br.com.elo7.sonda.candidato.domain.Command;
+import br.com.elo7.sonda.candidato.domain.Direction;
 import br.com.elo7.sonda.candidato.domain.Planet;
 import br.com.elo7.sonda.candidato.domain.PlanetGenerator;
 import br.com.elo7.sonda.candidato.domain.PlanetId;
 import br.com.elo7.sonda.candidato.domain.PlanetRepository;
+import br.com.elo7.sonda.candidato.domain.Position;
 import br.com.elo7.sonda.candidato.domain.Probe;
 import br.com.elo7.sonda.candidato.domain.ProbeGenerator;
+import br.com.elo7.sonda.candidato.domain.ProbeName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,23 +35,36 @@ public class ControlProbesUseCaseTest {
 
     PlanetRepository planetRepository = mock(PlanetRepository.class);
     final Planet generatedPlanet = spy(PlanetGenerator.gen());
-    final ProbeCommands probeCommands1 = new ProbeCommands(ProbeGenerator.gen(generatedPlanet.getId().value(), 0, 0), List.of(Command.R, Command.M));
-    final ProbeCommands probeCommands2 = new ProbeCommands(ProbeGenerator.gen(generatedPlanet.getId().value(), 1, 2), List.of(Command.L, Command.M));
+    final LandProbes.LandingProbe landingProbe1 = new LandProbes.LandingProbe(new ProbeName("Probe Name 1"), new Position(0, 0), Direction.N);
+    final LandProbes.LandingProbe landingProbe2 = new LandProbes.LandingProbe(new ProbeName("Probe Name 2"), new Position(1, 2), Direction.N);
 
     when(planetRepository.findById(any())).thenReturn(Optional.of(generatedPlanet));
     when(planetRepository.save(any())).thenReturn(generatedPlanet);
 
     ControlProbesUseCase controlProbesUseCase = new PlanetService(planetRepository);
 
-    final LandProbe command = new LandProbe(generatedPlanet.getId(), List.of(probeCommands1, probeCommands2));
+    LandProbes command = new LandProbes(generatedPlanet.getId(), List.of(landingProbe1, landingProbe2));
     controlProbesUseCase.execute(command);
 
     verify(planetRepository, times(1)).findById(generatedPlanet.getId());
 
-    verify(generatedPlanet, times(1)).land(probeCommands1.probe());
-    verify(generatedPlanet, times(1)).move(probeCommands1.probe().getId(), probeCommands1.commands());
-    verify(generatedPlanet, times(1)).land(probeCommands2.probe());
-    verify(generatedPlanet, times(1)).move(probeCommands2.probe().getId(), probeCommands2.commands());
+    ArgumentCaptor<Probe> argument = ArgumentCaptor.forClass(Probe.class);
+
+    verify(generatedPlanet, times(2)).land(argument.capture());
+
+
+    final Probe result1 = argument.getAllValues()
+      .get(0);
+    final Probe result2 = argument.getAllValues()
+      .get(1);
+
+    Assertions.assertEquals(landingProbe1.probeName(), result1.getName());
+    Assertions.assertEquals(landingProbe1.startDirection(), result1.getDirection());
+    Assertions.assertEquals(landingProbe1.startPosition(), result1.getPosition());
+
+    Assertions.assertEquals(landingProbe2.probeName(), result2.getName());
+    Assertions.assertEquals(landingProbe2.startDirection(), result2.getDirection());
+    Assertions.assertEquals(landingProbe2.startPosition(), result2.getPosition());
 
     verify(planetRepository, times(1)).save(argThat(planet -> {
       Assertions.assertEquals(2, planet.getProbes().size());
@@ -88,13 +104,16 @@ public class ControlProbesUseCaseTest {
   public void should_throw_exception_when_land_not_found_planet() {
 
     PlanetRepository planetRepository = mock(PlanetRepository.class);
-    final ProbeCommands probeCommands1 = new ProbeCommands(ProbeGenerator.gen(UUID.randomUUID().toString(), 0, 0), List.of(Command.R, Command.M));
+
+    final LandProbes.LandingProbe landingProbe =
+      new LandProbes.LandingProbe(new ProbeName("Probe Name 1"), new Position(0, 0), Direction.N);
+
 
     when(planetRepository.findById(any())).thenReturn(Optional.empty());
 
     ControlProbesUseCase controlProbesUseCase = new PlanetService(planetRepository);
 
-    final LandProbe command = new LandProbe(new PlanetId(UUID.randomUUID().toString()), List.of(probeCommands1));
+    final LandProbes command = new LandProbes(new PlanetId(UUID.randomUUID().toString()), List.of(landingProbe));
 
     Assertions.assertThrows(IllegalStateException.class, () -> controlProbesUseCase.execute(command));
   }
