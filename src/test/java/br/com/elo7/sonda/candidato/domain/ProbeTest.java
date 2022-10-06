@@ -74,8 +74,8 @@ public class ProbeTest {
     Probe probe = ProbeGenerator.gen(UUID.randomUUID().toString(), 1, 1, Direction.N);
     probe.applyCommandToProbe(Command.M);
 
-    assertEquals(1, probe.getPosition().getX());
-    assertEquals(2, probe.getPosition().getY());
+    assertEquals(1, probe.getPosition().x());
+    assertEquals(2, probe.getPosition().y());
     assertEquals(Direction.N, probe.getDirection());
   }
 
@@ -85,8 +85,8 @@ public class ProbeTest {
     Probe probe = ProbeGenerator.gen(UUID.randomUUID().toString(), 1, 1, Direction.S);
     probe.applyCommandToProbe(Command.M);
 
-    assertEquals(1, probe.getPosition().getX());
-    assertEquals(0, probe.getPosition().getY());
+    assertEquals(1, probe.getPosition().x());
+    assertEquals(0, probe.getPosition().y());
     assertEquals(Direction.S, probe.getDirection());
   }
 
@@ -96,8 +96,8 @@ public class ProbeTest {
     Probe probe = ProbeGenerator.gen(UUID.randomUUID().toString(), 1, 1, Direction.W);
     probe.applyCommandToProbe(Command.M);
 
-    assertEquals(0, probe.getPosition().getX());
-    assertEquals(1, probe.getPosition().getY());
+    assertEquals(0, probe.getPosition().x());
+    assertEquals(1, probe.getPosition().y());
     assertEquals(Direction.W, probe.getDirection());
   }
 
@@ -107,8 +107,8 @@ public class ProbeTest {
     Probe probe = ProbeGenerator.gen(UUID.randomUUID().toString(), 1, 1, Direction.E);
     probe.applyCommandToProbe(Command.M);
 
-    assertEquals(2, probe.getPosition().getX());
-    assertEquals(1, probe.getPosition().getY());
+    assertEquals(2, probe.getPosition().x());
+    assertEquals(1, probe.getPosition().y());
     assertEquals(Direction.E, probe.getDirection());
   }
 }

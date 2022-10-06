@@ -24,7 +24,7 @@ class InMemoryDatabase {
     public Optional<Planet> findById(PlanetId id) {
       return planets
         .stream()
-        .filter(planet -> planet.getId() == id)
+        .filter(planet -> planet.getId().equals(id))
         .findFirst();
     }
 

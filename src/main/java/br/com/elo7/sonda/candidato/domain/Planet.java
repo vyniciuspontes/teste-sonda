@@ -42,7 +42,7 @@ public class Planet {
   }
 
   public Optional<Probe> getProbe(ProbeId probeId) {
-    return this.probes.stream().filter(probe -> probe.getId() == probeId).findFirst();
+    return this.probes.stream().filter(probe -> probe.getId().equals(probeId)).findFirst();
   }
 
   public void land(Probe newProbe) {
@@ -64,7 +64,7 @@ public class Planet {
     commands.forEach(command -> {
       currentProbe.applyCommandToProbe(command);
 
-      if (command == Command.M) {
+      if (Command.M.equals(command)) {
         if (isOverlaping(currentProbe))
           //TODO change exception message
           throw new IllegalStateException();
@@ -83,8 +83,8 @@ public class Planet {
   }
 
   private Boolean isOutOfBounds(Probe probe) {
-    return probe.getPosition().getX() < 0 || probe.getPosition().getX() >= this.width.get() ||
-      probe.getPosition().getY() < 0 || probe.getPosition().getY() >= this.height.get();
+    return probe.getPosition().x() < 0 || probe.getPosition().x() >= this.width.value() ||
+      probe.getPosition().y() < 0 || probe.getPosition().y() >= this.height.value();
   }
 
   @Override

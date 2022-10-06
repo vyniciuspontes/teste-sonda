@@ -1,5 +1,7 @@
 package br.com.elo7.sonda.candidato.domain;
 
+import java.util.Objects;
+
 public record PlanetId(String value) {
 
   public PlanetId {
@@ -7,6 +9,17 @@ public record PlanetId(String value) {
     if (value == null || value.isEmpty() || value.isBlank())
       //TODO change message
       throw new IllegalArgumentException();
+  }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof PlanetId planetId)) return false;
+    return value.equals(planetId.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(value);
   }
 }
