@@ -2,6 +2,7 @@ package br.com.elo7.sonda.candidato.application;
 
 import br.com.elo7.sonda.candidato.application.commands.LandProbes;
 import br.com.elo7.sonda.candidato.application.commands.MoveProbe;
+import br.com.elo7.sonda.candidato.application.exceptions.PlanetNotFoundException;
 import br.com.elo7.sonda.candidato.domain.Command;
 import br.com.elo7.sonda.candidato.domain.Direction;
 import br.com.elo7.sonda.candidato.domain.Planet;
@@ -115,7 +116,7 @@ public class ControlProbesUseCaseTest {
 
     final LandProbes command = new LandProbes(new PlanetId(UUID.randomUUID().toString()), List.of(landingProbe));
 
-    Assertions.assertThrows(IllegalStateException.class, () -> controlProbesUseCase.execute(command));
+    Assertions.assertThrows(PlanetNotFoundException.class, () -> controlProbesUseCase.execute(command));
   }
 
   @Test
@@ -130,6 +131,6 @@ public class ControlProbesUseCaseTest {
 
     MoveProbe command = new MoveProbe(new PlanetId(UUID.randomUUID().toString()), generatedProbe1.getId(), List.of(Command.R, Command.M, Command.L, Command.M));
 
-    Assertions.assertThrows(IllegalStateException.class, () -> controlProbesUseCase.execute(command));
+    Assertions.assertThrows(PlanetNotFoundException.class, () -> controlProbesUseCase.execute(command));
   }
 }

@@ -1,6 +1,7 @@
 package br.com.elo7.sonda.candidato.application;
 
 import br.com.elo7.sonda.candidato.application.commands.CreatePlanet;
+import br.com.elo7.sonda.candidato.application.exceptions.PlanetNotFoundException;
 import br.com.elo7.sonda.candidato.domain.Planet;
 import br.com.elo7.sonda.candidato.domain.PlanetDimension;
 import br.com.elo7.sonda.candidato.domain.PlanetGenerator;
@@ -78,7 +79,7 @@ public class ManagePlanetsUseCaseTest {
 
     ManagePlanetsUseCase managePlanetsUseCase = new PlanetService(planetRepository);
 
-    Assertions.assertThrows(IllegalStateException.class, () -> managePlanetsUseCase.get(id));
+    Assertions.assertThrows(PlanetNotFoundException.class, () -> managePlanetsUseCase.get(id));
   }
 
   @Test

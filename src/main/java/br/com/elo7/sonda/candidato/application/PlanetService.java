@@ -3,6 +3,7 @@ package br.com.elo7.sonda.candidato.application;
 import br.com.elo7.sonda.candidato.application.commands.CreatePlanet;
 import br.com.elo7.sonda.candidato.application.commands.LandProbes;
 import br.com.elo7.sonda.candidato.application.commands.MoveProbe;
+import br.com.elo7.sonda.candidato.application.exceptions.PlanetNotFoundException;
 import br.com.elo7.sonda.candidato.domain.Planet;
 import br.com.elo7.sonda.candidato.domain.PlanetId;
 import br.com.elo7.sonda.candidato.domain.PlanetRepository;
@@ -25,8 +26,7 @@ public class PlanetService implements ControlProbesUseCase, ManagePlanetsUseCase
   public Planet execute(LandProbes landProbes) {
 
     final Planet planet = planetRepository.findById(landProbes.planetId()).stream().findFirst()
-      //TOdo change exception
-      .orElseThrow(IllegalStateException::new);
+      .orElseThrow(() -> new PlanetNotFoundException(landProbes.planetId()));
 
     landProbes.coordinates()
       .forEach(coordinates -> {
@@ -41,8 +41,7 @@ public class PlanetService implements ControlProbesUseCase, ManagePlanetsUseCase
   @Override
   public Planet execute(MoveProbe moveProbe) {
     final Planet planet = planetRepository.findById(moveProbe.planetId())
-      //Todo change exception
-      .orElseThrow(IllegalStateException::new);
+      .orElseThrow(() -> new PlanetNotFoundException(moveProbe.planetId()));
 
     planet.move(moveProbe.probeId(), moveProbe.commands());
     return planetRepository.save(planet);
@@ -59,8 +58,7 @@ public class PlanetService implements ControlProbesUseCase, ManagePlanetsUseCase
   @Override
   public Planet get(PlanetId planetId) {
     return planetRepository.findById(planetId)
-      //TODO change exception
-      .orElseThrow(() -> new IllegalStateException());
+      .orElseThrow(() -> new PlanetNotFoundException(planetId));
   }
 
   @Override
