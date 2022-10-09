@@ -1,6 +1,6 @@
 package br.com.elo7.sonda.candidato.domain.exception;
 
-abstract class DomainException extends RuntimeException{
+public abstract class DomainException extends RuntimeException{
   private final String entity;
   private final String error;
   private static final String MESSAGE = "%s - %s";

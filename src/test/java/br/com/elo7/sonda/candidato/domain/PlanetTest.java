@@ -1,6 +1,7 @@
 package br.com.elo7.sonda.candidato.domain;
 
 import br.com.elo7.sonda.candidato.domain.exception.InvalidVOException;
+import br.com.elo7.sonda.candidato.domain.exception.ProbeNotFoundException;
 import br.com.elo7.sonda.candidato.domain.exception.ProbeOutOfBoundsException;
 import br.com.elo7.sonda.candidato.domain.exception.ProbeOverlapingException;
 import org.junit.jupiter.api.Assertions;
@@ -95,6 +96,15 @@ public class PlanetTest {
     planet.land(probe1);
 
     Assertions.assertThrows(ProbeOutOfBoundsException.class, () -> planet.move(probe1.getId(), List.of(Command.M, Command.M, Command.M,
+      Command.M, Command.M)));
+  }
+
+  @Test
+  public void should_throw_exception_when_probe_not_found() {
+    Planet planet = PlanetGenerator.gen();
+    Probe probe1 = ProbeGenerator.gen(planet.getId().value(), 0, 0);
+
+    Assertions.assertThrows(ProbeNotFoundException.class, () -> planet.move(probe1.getId(), List.of(Command.M, Command.M, Command.M,
       Command.M, Command.M)));
   }
 

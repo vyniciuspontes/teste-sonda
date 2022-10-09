@@ -1,5 +1,6 @@
 package br.com.elo7.sonda.candidato.domain;
 
+import br.com.elo7.sonda.candidato.domain.exception.ProbeNotFoundException;
 import br.com.elo7.sonda.candidato.domain.exception.ProbeOutOfBoundsException;
 import br.com.elo7.sonda.candidato.domain.exception.ProbeOverlapingException;
 
@@ -60,7 +61,8 @@ public class Planet {
   }
 
   public void move(ProbeId probeId, List<Command> commands) {
-    final Probe currentProbe = probes.stream().filter(planetProbe -> planetProbe.getId().equals(probeId)).findFirst().orElseThrow();
+    final Probe currentProbe = probes.stream().filter(planetProbe -> planetProbe.getId().equals(probeId)).findFirst()
+      .orElseThrow(() -> new ProbeNotFoundException(probeId));
 
     commands.forEach(command -> {
       currentProbe.applyCommandToProbe(command);
