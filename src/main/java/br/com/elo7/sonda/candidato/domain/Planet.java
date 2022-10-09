@@ -1,5 +1,8 @@
 package br.com.elo7.sonda.candidato.domain;
 
+import br.com.elo7.sonda.candidato.domain.exception.ProbeOutOfBoundsException;
+import br.com.elo7.sonda.candidato.domain.exception.ProbeOverlapingException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,12 +51,10 @@ public class Planet {
   public void land(Probe newProbe) {
 
     if (isOverlaping(newProbe))
-      //TODO change exception message
-      throw new IllegalStateException();
+      throw new ProbeOverlapingException(newProbe);
 
     if (isOutOfBounds(newProbe))
-      //TODO change exception message
-      throw new IllegalStateException();
+      throw new ProbeOutOfBoundsException(newProbe);
 
     probes.add(newProbe);
   }
@@ -66,12 +67,10 @@ public class Planet {
 
       if (Command.M.equals(command)) {
         if (isOverlaping(currentProbe))
-          //TODO change exception message
-          throw new IllegalStateException();
+          throw new ProbeOverlapingException(currentProbe);
 
         if (isOutOfBounds(currentProbe))
-          //TODO change exception message
-          throw new IllegalStateException();
+          throw new ProbeOutOfBoundsException(currentProbe);
       }
     });
   }

@@ -1,6 +1,13 @@
 package br.com.elo7.sonda.candidato.domain;
 
+import br.com.elo7.sonda.candidato.domain.exception.InvalidVOException;
+
 public record Position(int x, int y) {
+
+  public Position {
+    if(x < 0 || y < 0)
+      throw new InvalidVOException(Position.class.getName());
+  }
 
   public Position increaseX() {
     final int newX = this.x + 1;

@@ -1,5 +1,8 @@
 package br.com.elo7.sonda.candidato.domain;
 
+import br.com.elo7.sonda.candidato.domain.exception.InvalidVOException;
+import br.com.elo7.sonda.candidato.domain.exception.ProbeOutOfBoundsException;
+import br.com.elo7.sonda.candidato.domain.exception.ProbeOverlapingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +35,7 @@ public class PlanetTest {
 
     planet.land(probe1);
 
-    Assertions.assertThrows(IllegalStateException.class, () -> planet.land(probe2));
+    Assertions.assertThrows(ProbeOverlapingException.class, () -> planet.land(probe2));
   }
 
   @Test
@@ -40,16 +43,16 @@ public class PlanetTest {
     Planet planet = PlanetGenerator.gen();
 
     Probe probe1 = ProbeGenerator.gen(planet.getId().value(), 5, 0, Direction.N);
-    Assertions.assertThrows(IllegalStateException.class, () -> planet.land(probe1));
+    Assertions.assertThrows(ProbeOutOfBoundsException.class, () -> planet.land(probe1));
 
-    Probe probe2 = ProbeGenerator.gen(planet.getId().value(), -1, 0, Direction.N);
-    Assertions.assertThrows(IllegalStateException.class, () -> planet.land(probe2));
+    Probe probe2 = ProbeGenerator.gen(planet.getId().value(), 8, 0, Direction.N);
+    Assertions.assertThrows(ProbeOutOfBoundsException.class, () -> planet.land(probe2));
 
     Probe probe3 = ProbeGenerator.gen(planet.getId().value(), 0, 5, Direction.N);
-    Assertions.assertThrows(IllegalStateException.class, () -> planet.land(probe3));
+    Assertions.assertThrows(ProbeOutOfBoundsException.class, () -> planet.land(probe3));
 
-    Probe probe4 = ProbeGenerator.gen(planet.getId().value(), 0, -1, Direction.N);
-    Assertions.assertThrows(IllegalStateException.class, () -> planet.land(probe4));
+    Probe probe4 = ProbeGenerator.gen(planet.getId().value(), 0, 8, Direction.N);
+    Assertions.assertThrows(ProbeOutOfBoundsException.class, () -> planet.land(probe4));
   }
 
   @Test
@@ -62,7 +65,7 @@ public class PlanetTest {
     planet.land(probe1);
     planet.land(probe2);
 
-    Assertions.assertThrows(IllegalStateException.class, () -> planet.move(probe1.getId(), List.of(Command.R, Command.M)));
+    Assertions.assertThrows(ProbeOverlapingException.class, () -> planet.move(probe1.getId(), List.of(Command.R, Command.M)));
   }
 
   @Test
@@ -91,7 +94,17 @@ public class PlanetTest {
 
     planet.land(probe1);
 
-    Assertions.assertThrows(IllegalStateException.class, () -> planet.move(probe1.getId(), List.of(Command.M, Command.M, Command.M,
+    Assertions.assertThrows(ProbeOutOfBoundsException.class, () -> planet.move(probe1.getId(), List.of(Command.M, Command.M, Command.M,
       Command.M, Command.M)));
+  }
+
+  @Test
+  public void should_throw_exception_when_vo_is_invalid(){
+
+    Assertions.assertThrows(InvalidVOException.class, () -> new PlanetId(null));
+    Assertions.assertThrows(InvalidVOException.class, () -> new PlanetName(null));
+    Assertions.assertThrows(InvalidVOException.class, () -> new PlanetName(""));
+    Assertions.assertThrows(InvalidVOException.class, () -> new PlanetName("  "));
+    Assertions.assertThrows(InvalidVOException.class, () -> new PlanetDimension(-1));
   }
 }
