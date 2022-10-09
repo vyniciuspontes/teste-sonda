@@ -4,11 +4,24 @@ import br.com.elo7.sonda.candidato.application.commands.LandProbes;
 import br.com.elo7.sonda.candidato.domain.Direction;
 import br.com.elo7.sonda.candidato.domain.Position;
 import br.com.elo7.sonda.candidato.domain.ProbeName;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public record ProbeRequestDTO(
+  @NotNull
+  @NotEmpty
   String name,
+  @NotNull
+  @Min(1)
   int x,
+  @NotNull
+  @Min(1)
   int y,
+  @NotNull
+  @Length(min = 1, max = 1)
   String direction
 ) {
 

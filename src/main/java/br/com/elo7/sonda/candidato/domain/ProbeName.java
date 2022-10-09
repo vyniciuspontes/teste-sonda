@@ -6,6 +6,6 @@ public record ProbeName(String value) {
   public ProbeName {
 
     if (value == null || value.isEmpty() || value.isBlank())
-      throw new InvalidVOException(ProbeName.class.getName());
+      throw new InvalidVOException(ProbeName.class.getSimpleName());
   }
 }

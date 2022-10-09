@@ -59,7 +59,7 @@ public class PlanetController {
   }
 
   @PostMapping("/{planetId}/probes")
-  public ResponseEntity<PlanetResponseDTO> landProbes(@RequestBody LandProbesRequestDTO landProbesRequestDTO, @PathVariable String planetId) {
+  public ResponseEntity<PlanetResponseDTO> landProbes(@RequestBody @Valid LandProbesRequestDTO landProbesRequestDTO, @PathVariable String planetId) {
     final Planet result = controlProbesUseCase.execute(landProbesRequestDTO.toLandProbes(planetId));
     return ResponseEntity.status(HttpStatus.CREATED).body(PlanetResponseDTO.from(result));
   }

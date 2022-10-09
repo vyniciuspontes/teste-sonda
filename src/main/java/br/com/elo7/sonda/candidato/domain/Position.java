@@ -6,7 +6,7 @@ public record Position(int x, int y) {
 
   public Position {
     if(x < 0 || y < 0)
-      throw new InvalidVOException(Position.class.getName());
+      throw new InvalidVOException(Position.class.getSimpleName());
   }
 
   public Position increaseX() {

@@ -9,7 +9,7 @@ public record PlanetId(String value) {
   public PlanetId {
 
     if (value == null || value.isEmpty() || value.isBlank())
-      throw new InvalidVOException(PlanetId.class.getName());
+      throw new InvalidVOException(PlanetId.class.getSimpleName());
   }
 
   @Override

@@ -6,7 +6,7 @@ public record ProbeId(String value) {
   public ProbeId {
 
     if (value == null || value.isEmpty() || value.isBlank())
-      throw new InvalidVOException(ProbeId.class.getName());
+      throw new InvalidVOException(ProbeId.class.getSimpleName());
 
   }
 }

@@ -6,7 +6,7 @@ public record PlanetDimension(int value) {
   public PlanetDimension {
 
     if (value <= 0) {
-      throw new InvalidVOException(PlanetDimension.class.getName());
+      throw new InvalidVOException(PlanetDimension.class.getSimpleName());
     }
 
   }

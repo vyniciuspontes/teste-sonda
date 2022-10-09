@@ -2,12 +2,11 @@ package br.com.elo7.sonda.candidato.adapter.controller;
 
 import java.util.List;
 
-public record ErrorResponse(
-  List<ErrorMessage> errorMessages
+public record ValidationErrorResponse(
+  List<ValidationErrorMessage> errors
 ) {
-  public record ErrorMessage(
+  public record ValidationErrorMessage(
     String parameterName,
     String description
-  ) {
-  }
+  ){}
 }

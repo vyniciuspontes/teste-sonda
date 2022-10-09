@@ -7,7 +7,7 @@ public record PlanetName(String value) {
   public PlanetName {
 
     if (value == null || value.isEmpty() || value.isBlank())
-      throw new InvalidVOException(PlanetName.class.getName());
+      throw new InvalidVOException(PlanetName.class.getSimpleName());
 
   }
 }
