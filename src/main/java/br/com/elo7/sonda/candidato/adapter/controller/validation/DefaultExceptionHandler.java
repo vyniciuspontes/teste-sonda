@@ -1,4 +1,4 @@
-package br.com.elo7.sonda.candidato.adapter.controller;
+package br.com.elo7.sonda.candidato.adapter.controller.validation;
 
 import br.com.elo7.sonda.candidato.application.exceptions.PlanetNotFoundException;
 import br.com.elo7.sonda.candidato.domain.exception.DomainException;

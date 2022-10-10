@@ -6,11 +6,11 @@ import br.com.elo7.sonda.candidato.adapter.controller.dto.PlanetResponseDTO;
 import br.com.elo7.sonda.candidato.adapter.controller.dto.PostPlanetRequestDTO;
 import br.com.elo7.sonda.candidato.adapter.controller.dto.ProbeRequestDTO;
 import br.com.elo7.sonda.candidato.adapter.controller.dto.ProbeResponseDTO;
+import br.com.elo7.sonda.candidato.adapter.controller.dto.MoveProbeRequestDTO;
 import br.com.elo7.sonda.candidato.application.ControlProbesUseCase;
 import br.com.elo7.sonda.candidato.application.ManagePlanetsUseCase;
 import br.com.elo7.sonda.candidato.application.commands.LandProbes;
 import br.com.elo7.sonda.candidato.application.commands.MoveProbe;
-import br.com.elo7.sonda.candidato.domain.Command;
 import br.com.elo7.sonda.candidato.domain.Planet;
 import br.com.elo7.sonda.candidato.domain.PlanetGenerator;
 import br.com.elo7.sonda.candidato.domain.Probe;
@@ -174,7 +174,7 @@ public class PlanetControllerTest {
 
     PlanetController planetController = new PlanetController(managePlanetsUseCase, controlProbesUseCase);
 
-    final ResponseEntity<PlanetResponseDTO> response = planetController.moveProbe(List.of(Command.M), generatedPlanet.getId().value(), generatedProbe.getId().value());
+    final ResponseEntity<PlanetResponseDTO> response = planetController.moveProbe(new MoveProbeRequestDTO(List.of("M")), generatedPlanet.getId().value(), generatedProbe.getId().value());
 
     verify(controlProbesUseCase, times(1)).execute(any(MoveProbe.class));
 

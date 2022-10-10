@@ -3,6 +3,7 @@ package br.com.elo7.sonda.candidato.adapter.controller;
 import br.com.elo7.sonda.candidato.adapter.controller.dto.LandProbesRequestDTO;
 import br.com.elo7.sonda.candidato.adapter.controller.dto.PlanetResponseDTO;
 import br.com.elo7.sonda.candidato.adapter.controller.dto.PostPlanetRequestDTO;
+import br.com.elo7.sonda.candidato.adapter.controller.dto.MoveProbeRequestDTO;
 import br.com.elo7.sonda.candidato.application.ControlProbesUseCase;
 import br.com.elo7.sonda.candidato.application.ManagePlanetsUseCase;
 import br.com.elo7.sonda.candidato.application.commands.MoveProbe;
@@ -13,6 +14,7 @@ import br.com.elo7.sonda.candidato.domain.ProbeId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
+@Validated
 @RequestMapping("/planets")
 public class PlanetController {
   private final ManagePlanetsUseCase managePlanetsUseCase;
@@ -64,9 +68,11 @@ public class PlanetController {
   }
 
   @PatchMapping("/{planetId}/probes/{probeId}/move")
-  public ResponseEntity<PlanetResponseDTO> moveProbe(@RequestBody List<@Valid Command> commands, @PathVariable String planetId, @PathVariable String probeId) {
+  public ResponseEntity<PlanetResponseDTO> moveProbe(@RequestBody @Valid MoveProbeRequestDTO requestDTO,
+                                                     @PathVariable String planetId, @PathVariable String probeId) {
 
-    MoveProbe moveProbe = new MoveProbe(new PlanetId(planetId), new ProbeId(probeId), commands);
+    MoveProbe moveProbe = new MoveProbe(new PlanetId(planetId), new ProbeId(probeId), requestDTO.commands()
+      .stream().map(Command::valueOf).collect(Collectors.toList()));
     final Planet result = controlProbesUseCase.execute(moveProbe);
     return ResponseEntity.ok().body(PlanetResponseDTO.from(result));
   }

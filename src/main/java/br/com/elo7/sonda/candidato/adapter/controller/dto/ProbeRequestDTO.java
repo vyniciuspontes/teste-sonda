@@ -1,5 +1,6 @@
 package br.com.elo7.sonda.candidato.adapter.controller.dto;
 
+import br.com.elo7.sonda.candidato.adapter.controller.validator.ValueOfEnum;
 import br.com.elo7.sonda.candidato.application.commands.LandProbes;
 import br.com.elo7.sonda.candidato.domain.Direction;
 import br.com.elo7.sonda.candidato.domain.Position;
@@ -22,6 +23,7 @@ public record ProbeRequestDTO(
   int y,
   @NotNull
   @Length(min = 1, max = 1)
+  @ValueOfEnum(enumClass = Direction.class)
   String direction
 ) {
 
