@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/planets")
@@ -53,7 +52,7 @@ public class PlanetController {
   @GetMapping
   public ResponseEntity<List<PlanetResponseDTO>> getAll() {
 
-    final Set<Planet> result = managePlanetsUseCase.getAll();
+    final List<Planet> result = managePlanetsUseCase.getAll();
     final List<PlanetResponseDTO> response = result.stream().map(PlanetResponseDTO::from).toList();
     return ResponseEntity.ok().body(response);
   }

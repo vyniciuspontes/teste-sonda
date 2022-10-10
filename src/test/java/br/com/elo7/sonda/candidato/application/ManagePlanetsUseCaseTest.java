@@ -11,8 +11,8 @@ import br.com.elo7.sonda.candidato.domain.PlanetRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -90,11 +90,11 @@ public class ManagePlanetsUseCaseTest {
     final Planet foundPlanet1 = PlanetGenerator.gen();
     final Planet foundPlanet2 = PlanetGenerator.gen();
 
-    when(planetRepository.findAll()).thenReturn(Set.of(foundPlanet1, foundPlanet2));
+    when(planetRepository.findAll()).thenReturn(List.of(foundPlanet1, foundPlanet2));
 
     ManagePlanetsUseCase managePlanetsUseCase = new PlanetService(planetRepository);
 
-    final Set<Planet> result = managePlanetsUseCase.getAll();
+    final List<Planet> result = managePlanetsUseCase.getAll();
 
     Assertions.assertEquals(2, result.size());
 

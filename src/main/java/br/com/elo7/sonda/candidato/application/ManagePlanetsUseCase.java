@@ -4,7 +4,7 @@ import br.com.elo7.sonda.candidato.application.commands.CreatePlanet;
 import br.com.elo7.sonda.candidato.domain.Planet;
 import br.com.elo7.sonda.candidato.domain.PlanetId;
 
-import java.util.Set;
+import java.util.List;
 
 public interface ManagePlanetsUseCase {
 
@@ -12,5 +12,5 @@ public interface ManagePlanetsUseCase {
 
   Planet get(PlanetId planetId);
 
-  Set<Planet> getAll();
+  List<Planet> getAll();
 }

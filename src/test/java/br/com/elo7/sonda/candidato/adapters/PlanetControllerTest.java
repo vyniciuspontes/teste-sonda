@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -65,7 +64,7 @@ public class PlanetControllerTest {
     final Planet generatedPlanet1 = PlanetGenerator.gen();
     final Planet generatedPlanet2 = PlanetGenerator.gen();
     final Planet generatedPlanet3 = PlanetGenerator.gen();
-    final Set<Planet> planets = Set.of(generatedPlanet1, generatedPlanet2, generatedPlanet3);
+    final List<Planet> planets = List.of(generatedPlanet1, generatedPlanet2, generatedPlanet3);
     when(managePlanetsUseCase.getAll()).thenReturn(planets);
 
     PlanetController planetController = new PlanetController(managePlanetsUseCase, controlProbesUseCase);

@@ -9,16 +9,17 @@ import br.com.elo7.sonda.candidato.domain.PlanetId;
 import br.com.elo7.sonda.candidato.domain.PlanetRepository;
 import br.com.elo7.sonda.candidato.domain.Probe;
 import br.com.elo7.sonda.candidato.domain.ProbeId;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class PlanetService implements ControlProbesUseCase, ManagePlanetsUseCase {
   private final PlanetRepository planetRepository;
 
-  public PlanetService(PlanetRepository planetRepository) {
+  public PlanetService(@Qualifier("mementoPlanetRepository") PlanetRepository planetRepository) {
     this.planetRepository = planetRepository;
   }
 
@@ -62,7 +63,7 @@ public class PlanetService implements ControlProbesUseCase, ManagePlanetsUseCase
   }
 
   @Override
-  public Set<Planet> getAll() {
+  public List<Planet> getAll() {
     return planetRepository.findAll();
   }
 }

@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+    app:
+        build: .
+        ports:
+            - "8080:8080"
+        depends_on:
+            - mongo
+    mongo:
+        image: mongo
+        restart: always
+        ports:
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_DATABASE: sonda
+            MONGO_INITDB_ROOT_USERNAME: elo7
+            MONGO_INITDB_ROOT_PASSWORD: elo7
+        volumes:
+            - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js

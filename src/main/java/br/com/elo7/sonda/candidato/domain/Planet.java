@@ -10,12 +10,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class Planet {
-  private final PlanetId id;
-  private final PlanetDimension width;
-  private final PlanetDimension height;
-  private final List<Probe> probes;
+  private PlanetId id;
+  private PlanetDimension width;
+  private PlanetDimension height;
+  private List<Probe> probes;
 
-  private final PlanetName name;
+  private PlanetName name;
+
+  //Usado para Spring Data
+  private Planet() {}
 
   public Planet(PlanetId id, PlanetName name, PlanetDimension width, PlanetDimension height) {
     this.id = id;
@@ -98,5 +101,57 @@ public class Planet {
   @Override
   public int hashCode() {
     return Objects.hash(id);
+  }
+
+  public static Planet from(Memento memento){
+    final Planet planet = new Planet(memento.id, memento.name, memento.width, memento.height);
+    memento.probes.forEach(planet::land);
+    return planet;
+  }
+
+  public static class Memento {
+
+    private final PlanetId id;
+
+    private final PlanetName name;
+    private final PlanetDimension width;
+    private final PlanetDimension height;
+    private final List<Probe> probes;
+
+    public Memento(PlanetId id, PlanetName name, PlanetDimension width, PlanetDimension height, List<Probe> probes) {
+      this.id = id;
+      this.name = name;
+      this.width = width;
+      this.height = height;
+      this.probes = probes;
+    }
+
+    public Memento(Planet planet) {
+      this.id = planet.id;
+      this.name = planet.name;
+      this.width = planet.width;
+      this.height = planet.height;
+      this.probes = planet.probes;
+    }
+
+    public PlanetId getId() {
+      return id;
+    }
+
+    public PlanetName getName() {
+      return name;
+    }
+
+    public PlanetDimension getWidth() {
+      return width;
+    }
+
+    public PlanetDimension getHeight() {
+      return height;
+    }
+
+    public List<Probe> getProbes() {
+      return probes;
+    }
   }
 }

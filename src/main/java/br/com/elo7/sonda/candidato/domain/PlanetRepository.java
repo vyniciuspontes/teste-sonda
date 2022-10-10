@@ -1,7 +1,7 @@
 package br.com.elo7.sonda.candidato.domain;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface PlanetRepository {
 
@@ -9,6 +9,6 @@ public interface PlanetRepository {
 
   Optional<Planet> findById(PlanetId id);
 
-  Set<Planet> findAll();
+  List<Planet> findAll();
 
 }
