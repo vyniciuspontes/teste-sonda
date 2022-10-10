@@ -19,8 +19,7 @@ public class MementoPlanetRepository implements PlanetRepository {
   @Override
   public Planet save(Planet planet) {
 
-    final Planet.Memento memento = new Planet.Memento(planet);
-    final PlanetDocument planetDocument = PlanetDocument.from(memento);
+    final PlanetDocument planetDocument = PlanetDocument.from(planet.createSnapshot());
     planetRepositoryMongo.save(planetDocument);
 
     return planet;
@@ -28,12 +27,11 @@ public class MementoPlanetRepository implements PlanetRepository {
 
   @Override
   public Optional<Planet> findById(PlanetId id) {
-
-    return this.planetRepositoryMongo.findById(id).map(PlanetDocument::toMemento).map(Planet::from);
+    return this.planetRepositoryMongo.findById(id).map(PlanetDocument::toMemento).map(Planet::restore);
   }
 
   @Override
   public List<Planet> findAll() {
-    return this.planetRepositoryMongo.findAll().stream().map(PlanetDocument::toMemento).map(Planet::from).toList();
+    return this.planetRepositoryMongo.findAll().stream().map(PlanetDocument::toMemento).map(Planet::restore).toList();
   }
 }

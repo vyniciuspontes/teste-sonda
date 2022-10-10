@@ -103,7 +103,11 @@ public class Planet {
     return Objects.hash(id);
   }
 
-  public static Planet from(Memento memento){
+  public Memento createSnapshot(){
+    return new Memento(this);
+  }
+
+  public static Planet  restore(Memento memento){
     final Planet planet = new Planet(memento.id, memento.name, memento.width, memento.height);
     memento.probes.forEach(planet::land);
     return planet;
@@ -112,7 +116,6 @@ public class Planet {
   public static class Memento {
 
     private final PlanetId id;
-
     private final PlanetName name;
     private final PlanetDimension width;
     private final PlanetDimension height;
@@ -126,7 +129,7 @@ public class Planet {
       this.probes = probes;
     }
 
-    public Memento(Planet planet) {
+    Memento(Planet planet) {
       this.id = planet.id;
       this.name = planet.name;
       this.width = planet.width;
