@@ -81,9 +81,35 @@ Com isso as dependências serão baixadas e a API subirá na porta `8080`;
 curl -X POST http://localhost:8080/planet-with-probes -H 'Content-Type: application/json' -d '{"width":10,"height":10,"probes":[{"x":1,"y":2,"direction":"N","commands": "LMLMLMLMM"},{"x":3,"y":3,"direction":"E","commands": "MMRMMRMRRM"}]}'
 ```
 
-## Suposições do Candidato Vynicius
+# Área do Candidato
 
-### Regras de negócio
+## Regras de negócio
 - As sondas não podem se mover para fora do plano cartesiano
 - As sondas não podem colidir
 - Lançar a sonda e mover a sonda são 2 comandos distintos
+
+## Padrão de Arquiterura
+O projeto foi reestruturado para o padrão Hexagonal aplicando DDD com camadas bem definidas:
+
+- Domain, concentrando o Aggregate, com as entidades, value objects, repository, regras de negócio e exceções do domínio.
+- Application, contendo os casos de uso, suas implementações e também as portas para os adapters e exceções de aplicação.
+- Adapter, a camada concentra a implementação das portas definidas na camada de aplicação e o uso de infraestruturas e bibliotecas externas.
+
+## Banco de Dados
+Escolhi o MongoDb pela praticidade de conseguir salvar o aggregate como um documento só.
+
+## Rodando a aplicação
+Para rodar a aplicação é necessário instalar o Docker e o Docker Compose. Na pasta raiz do projeto execute o seguinte comando:
+
+```
+docker-compose up
+``` 
+
+O Docker Compose executará a aplicação na porta 8080 e um container de MongoDB.
+
+## Testando
+Para testar há 2 opções na pasta DOCs:
+
+- Utilizar o arquivo de openapi e realizar os requests através do swagger
+- Importar a collection do Postman 
+
