@@ -108,7 +108,7 @@ docker-compose up
 O Docker Compose executará a aplicação na porta 8080 e um container de MongoDB.
 
 ## Testando
-Para testar há 2 opções na pasta DOCs:
+Para testar, há 2 opções na pasta docs:
 
 - Utilizar o arquivo de openapi e realizar os requests através do swagger
 - Importar a collection do Postman 
