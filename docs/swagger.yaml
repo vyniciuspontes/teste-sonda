@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 info:
     version: 1.0.0
-    title: Swagger Petstore
+    title: Swagger Planets
     license:
         name: MIT
 servers:
@@ -12,7 +12,6 @@ paths:
             summary: List all planets
             tags:
                 - planets
-
             responses:
                 '200':
                     description: A array of planets
@@ -22,12 +21,28 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/Planet"
-                default:
-                    description: unexpected error
+                '400':
+                    description: Validation Error
                     content:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
+                '404':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: "Planet not found '4012675e-10bc-4f6d-88c8-43259be27eba2"
+                '422':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SimpleError"
         post:
             summary: Create a planet
             tags:
@@ -49,12 +64,28 @@ paths:
                                 items:
                                     $ref: "#/components/schemas/Planet"
 
-                default:
-                    description: unexpected error
+                '400':
+                    description: Validation Error
                     content:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
+                '404':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: "Planet not found '4012675e-10bc-4f6d-88c8-43259be27eba2"
+                '422':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SimpleError"
     /planets/{planetId}:
         get:
             summary: Info for a specific planet
@@ -74,12 +105,28 @@ paths:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Planet"
-                default:
-                    description: unexpected error
+                '400':
+                    description: Validation Error
                     content:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
+                '404':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: "Planet not found '4012675e-10bc-4f6d-88c8-43259be27eba2"
+                '422':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SimpleError"
     /planets/{planetId}/probes:
         post:
             summary: Land new probes
@@ -111,12 +158,28 @@ paths:
                                 items:
                                     $ref: "#/components/schemas/Planet"
 
-                default:
-                    description: unexpected error
+                '400':
+                    description: Validation Error
                     content:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
+                '404':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: "Planet not found '4012675e-10bc-4f6d-88c8-43259be27eba2"
+                '422':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SimpleError"
 
     /planets/{planetId}/probes/{probeId}:
         patch:
@@ -155,12 +218,28 @@ paths:
                                 items:
                                     $ref: "#/components/schemas/Planet"
 
-                default:
-                    description: unexpected error
+                '400':
+                    description: Validation Error
                     content:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/Error"
+                '404':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: "Planet not found '4012675e-10bc-4f6d-88c8-43259be27eba2"
+                '422':
+                    description: Unprocessable Entity
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/SimpleError"
 components:
     schemas:
 
@@ -202,14 +281,6 @@ components:
             allOf:
                 - $ref: '#/components/schemas/LandindProbe'
 
-        LandProbes:
-            type: object
-            properties:
-                probes:
-                    type: array
-                    items:
-                        $ref: "#/components/schemas/LandindProbe"
-
         LandindProbe:
             type: object
             properties:
@@ -244,13 +315,20 @@ components:
                             - L
                             - R
         Error:
+            allOf:
+                - $ref: "#/components/schemas/SimpleError"
             type: object
             required:
-                - code
-                - message
+                - parameterName
             properties:
-                code:
-                    type: integer
-                    format: int32
-                message:
+                parameterName:
                     type: string
+                    example: "probes[1].direction"
+        SimpleError:
+            type: object
+            required:
+                - error
+            properties:
+                error:
+                    type: string
+                    example: "should be any value of: [N, W, E, S]"
