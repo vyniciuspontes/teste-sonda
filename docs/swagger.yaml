@@ -1,0 +1,256 @@
+openapi: "3.0.0"
+info:
+    version: 1.0.0
+    title: Swagger Petstore
+    license:
+        name: MIT
+servers:
+    - url: http://127.0.0.1:8080/
+paths:
+    /planets:
+        get:
+            summary: List all planets
+            tags:
+                - planets
+
+            responses:
+                '200':
+                    description: A array of planets
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Planet"
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+        post:
+            summary: Create a planet
+            tags:
+                - planets
+            requestBody:
+                description: New planet
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreatePlanet'
+            responses:
+                '201':
+                    description: Null response
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Planet"
+
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /planets/{planetId}:
+        get:
+            summary: Info for a specific planet
+            tags:
+                - planets
+            parameters:
+                - name: planetId
+                  in: path
+                  description: planet id
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Expected response to a valid request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Planet"
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+    /planets/{planetId}/probes:
+        post:
+            summary: Land new probes
+            tags:
+                - planets
+            parameters:
+                - name: planetId
+                  in: path
+                  description: planet id
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                description: Landing probes
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/LandindProbe'
+            responses:
+                '201':
+                    description: Planet with new probes
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Planet"
+
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+
+    /planets/{planetId}/probes/{probeId}:
+        patch:
+            summary: Land new probes
+            tags:
+                - planets
+            parameters:
+                - name: planetId
+                  in: path
+                  description: planet id
+                  required: true
+                  schema:
+                      type: string
+                - name: probeId
+                  in: path
+                  description: probe id
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                description: Probe commands
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/MoveProbe'
+            responses:
+                '201':
+                    description: Planet with new probes
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/Planet"
+
+                default:
+                    description: unexpected error
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Error"
+components:
+    schemas:
+
+        Planet:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: "4012675e-10bc-4f6d-88c8-43259be27eba"
+                probes:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Probe"
+            allOf:
+                - $ref: '#/components/schemas/CreatePlanet'
+
+
+        CreatePlanet:
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: "Planet 1"
+                width:
+                    type: integer
+                    format: int64
+                    example: 5
+                height:
+                    type: integer
+                    format: int64
+                    example: 5
+
+        Probe:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: "65c29cf8-8917-466c-a96b-d7e0f3d11f74"
+            allOf:
+                - $ref: '#/components/schemas/LandindProbe'
+
+        LandProbes:
+            type: object
+            properties:
+                probes:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/LandindProbe"
+
+        LandindProbe:
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: "Probe Name 1"
+                x:
+                    type: integer
+                    format: int64
+                    example: 1
+                y:
+                    type: integer
+                    format: int64
+                    example: 2
+                direction:
+                    type: string
+                    enum:
+                        - N
+                        - S
+                        - W
+                        - E
+
+        MoveProbe:
+            type: object
+            properties:
+                commands:
+                    type: array
+                    items:
+                        type: string
+                        enum:
+                            - M
+                            - L
+                            - R
+        Error:
+            type: object
+            required:
+                - code
+                - message
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string

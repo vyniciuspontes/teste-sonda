@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "f26455bc-ade8-42c8-a4fb-22510f4985cd",
+		"name": "Sonda",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "583305"
+	},
+	"item": [
+		{
+			"name": "Create Planet",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Planet Name 1\",\n    \"width\": 5,\n    \"height\": 5\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/planets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"planets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Land Probes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"probes\": [\n        {\n            \"name\": \"Probe Name 2\",\n            \"x\": 1,\n            \"y\": 3,\n            \"direction\": \"N\"\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/planets/:planetId/probes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"planets",
+						":planetId",
+						"probes"
+					],
+					"variable": [
+						{
+							"key": "planetId",
+							"value": "44ea1715-e680-40c8-9dfe-377af39d8f77"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Move Probe",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    \"R\", \"M\"\n]"
+				},
+				"url": {
+					"raw": "http://localhost:8080/planets/:planetId/probes/:probeId/move",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"planets",
+						":planetId",
+						"probes",
+						":probeId",
+						"move"
+					],
+					"variable": [
+						{
+							"key": "planetId",
+							"value": "44ea1715-e680-40c8-9dfe-377af39d8f77"
+						},
+						{
+							"key": "probeId",
+							"value": "b3b5a645-3a10-4ed6-be4f-086532962216"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Planet",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/planets/:planetId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"planets",
+						":planetId"
+					],
+					"variable": [
+						{
+							"key": "planetId",
+							"value": "5ca8ed18-0791-46b2-8349-b59960a420d"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Planets",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/planets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"planets"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
