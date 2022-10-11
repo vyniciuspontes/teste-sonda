@@ -98,6 +98,18 @@ O projeto foi reestruturado para o padrão Hexagonal aplicando DDD com camadas b
 ## Banco de Dados
 Escolhi o MongoDb pela praticidade de conseguir salvar o aggregate como um documento só.
 
+### Sobre Repositories e o uso do Spring Data
+Há 2 repositórios na aplicação PlanetRepository e MementoPlanetRepository. 
+Um salva a classe do Aggregate Root diretamente e o outro utiliza um entidade de persistencia "PlanetDocument". 
+
+Para salvar e resgatar o Aggregate Root "Planet" diretamente no banco sem precisar mapear para uma 
+entidade de persistência, tive que inserir um construtor vazio na classe. Isso fere o princío de isolamento do domínio. 
+
+No entanto, para agradar os puristas, também criei uma solução para persistir o Aggregate Root aplicando o padrão Memento, 
+que cria um snapshot do Aggregate Root, o qual utilizo para mapear as propriedades do domínio para uma entidade 
+de persistência e vice e versa. O Aggregate Root gera um snapshot de si mesmo na hora e também 
+sabe se rehidratar a partir de um snapshop vindo partir do banco de dados. 
+
 ## Rodando a aplicação
 Para rodar a aplicação é necessário instalar o Docker e o Docker Compose. Na pasta raiz do projeto execute o seguinte comando:
 
@@ -110,6 +122,15 @@ O Docker Compose executará a aplicação na porta 8080 e um container de MongoD
 ## Testando
 Para testar, há 2 opções na pasta docs:
 
-- Utilizar o arquivo de openapi e realizar os requests através do swagger
+- Utilizar o arquivo de **swagger.yml** e realizar os requests através do swagger
 - Importar a collection do Postman 
 
+## O que faltou ?
+- Testes de integração, para validar a integração com o MongoDb.
+- Testes E2E utilizando alguma solução dockerizada. 
+- Versionamento da API
+- Segurança da API
+- Endpoint para buscar uma sonda específica
+- Endpoint para mudar o nome do planeta ou da sonda
+- Alguma solução de rastreabilidade dos requests
+- Logs
