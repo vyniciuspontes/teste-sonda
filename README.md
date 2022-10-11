@@ -126,7 +126,7 @@ Para testar, há 2 opções na pasta docs:
 - Importar a collection do Postman 
 
 ## O que faltou ?
-- Testes de integração, para validar a integração com o MongoDb.
+- Testes de integração, para validar a integração com o MongoDb e as respostas da API
 - Testes E2E utilizando alguma solução dockerizada. 
 - Versionamento da API
 - Segurança da API
