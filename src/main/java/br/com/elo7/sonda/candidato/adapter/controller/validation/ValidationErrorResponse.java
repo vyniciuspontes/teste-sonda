@@ -7,6 +7,6 @@ public record ValidationErrorResponse(
 ) {
   public record ValidationErrorMessage(
     String parameterName,
-    String description
+    String error
   ){}
 }
