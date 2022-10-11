@@ -99,7 +99,7 @@ O projeto foi reestruturado para o padrão Hexagonal aplicando DDD com camadas b
 Escolhi o MongoDb pela praticidade de conseguir salvar o aggregate como um documento só.
 
 ### Sobre Repositories e o uso do Spring Data
-Há 2 repositórios na aplicação PlanetRepository e MementoPlanetRepository. 
+Há 2 repositórios na aplicação DefaultPlanetRepository e MementoPlanetRepository. 
 Um salva a classe do Aggregate Root diretamente e o outro utiliza um entidade de persistencia "PlanetDocument". 
 
 Para salvar e resgatar o Aggregate Root "Planet" diretamente no banco sem precisar mapear para uma 
